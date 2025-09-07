@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const foodpartnerModel = require('../models/foodpartner.model');
 async function register (req, res) {
     try {
-        const {fullName, email, password} = req.body;
+        const {fullName, email,phone, address, password} = req.body;
         const userAlreadyExists = await userModel.findOne({ email });
         if (userAlreadyExists) {
             return res.status(400).json({
@@ -15,6 +15,8 @@ async function register (req, res) {
         const user = await userModel.create({
             fullName,
             email,
+            phone,
+            address,
             password: hashPassword
         });
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
@@ -24,6 +26,8 @@ async function register (req, res) {
             user: {
                 _id: user._id,
                 email: user.email,
+                phone: user.phone,
+                address: user.address,
                 fullName: user.fullName,
             }
         });
@@ -73,7 +77,7 @@ function logout (req, res) {
 
 async function registerFoodPartner (req, res) {
     try {
-    const { fullName, email, password } = req.body;
+    const { fullName, email,phone,address, password } = req.body;
     const isAccountAlreadyExists = await foodpartnerModel.findOne({ email });
     if (isAccountAlreadyExists) {
         return res.status(400).json({
@@ -84,6 +88,8 @@ async function registerFoodPartner (req, res) {
     const foodPartner = await foodpartnerModel.create({
         fullName,
         email,
+        phone,
+        address,
         password: hashedPassword
     });
     const tocken = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET);
@@ -93,6 +99,8 @@ async function registerFoodPartner (req, res) {
         foodPartner: {
             _id: foodPartner._id,
             email: foodPartner.email,
+            phone: foodPartner.phone,
+            address: foodPartner.address,
             fullName: foodPartner.fullName,
         }
     });
