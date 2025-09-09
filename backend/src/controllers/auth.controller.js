@@ -77,7 +77,7 @@ function logout (req, res) {
 
 async function registerFoodPartner (req, res) {
     try {
-    const { fullName, email,phone,address, password } = req.body;
+    const {fullName,businessName,email,phone,address, password} = req.body;
     const isAccountAlreadyExists = await foodpartnerModel.findOne({ email });
     if (isAccountAlreadyExists) {
         return res.status(400).json({
@@ -87,6 +87,7 @@ async function registerFoodPartner (req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const foodPartner = await foodpartnerModel.create({
         fullName,
+        businessName,
         email,
         phone,
         address,
@@ -99,6 +100,7 @@ async function registerFoodPartner (req, res) {
         foodPartner: {
             _id: foodPartner._id,
             email: foodPartner.email,
+            businessName : foodPartner.businessName,
             phone: foodPartner.phone,
             address: foodPartner.address,
             fullName: foodPartner.fullName,
